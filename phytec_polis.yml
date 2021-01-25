@@ -1,0 +1,32 @@
+header:
+  version: 10
+
+build_system: isar
+distro: yogurt-vendor-xwayland
+machine: phyboard-polis-imx8mm-3
+target: mc:phyboard-polis-imx8mm-3:phytec-qt5demo-image
+repos:
+  isar:
+    url: "git@github.com:/ilbers/isar"
+    refspec: "f5a6fdfd9aad49202093aab2158f625429eaf7c5"
+    layers:
+      meta:
+      meta-isar:
+  meta-isar-phytec:
+    url: "git@github.com:/ilbers/meta-isar-phytec"
+  meta-isar-yogurt:
+    url: "git@github.com:/ilbers/meta-isar-yogurt"
+
+bblayers_conf_header:
+  standard: |
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+
+local_conf_header:
+  standard: |
+    ISAR_CROSS_COMPILE = "1"
+
+    USERS += "root"
+    USER_root[password] ??= "$6$rounds=10000$RXeWrnFmkY$DtuS/OmsAS2cCEDo0BF5qQsizIrq6jPgXnwv3PHqREJeKd1sXdHX/ayQtuQWVDHe0KIO0/sVH8dvQm1KthF0d/"
+
+    PATCHRESOLVE = "noop"
