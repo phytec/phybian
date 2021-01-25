@@ -5,6 +5,10 @@ Phytec demo images with link:++https://github.com/siemens/kas++[kas].
 
 == Preparing the Build Environment
 
+If running build in kas-docker the only prerequirement is installed docker.
+
+If running native Isar build you should prepare build environment:
+
 Install the required packages
 link:++https://github.com/ilbers/isar/blob/master/doc/user_manual.md#install-host-tools++[for Isar]
 and
@@ -47,10 +51,35 @@ $ cd phytec-isar-platform
 
 == Building the Image
 
+To speed up fetching process set global DL_DIR location:
+
+```
+export DL_DIR=/path/to/downloads
+```
+
+Start ssh-agent and add your rsa key:
+
+```
+$ eval $(ssh-agent)
+$ ssh-add ~/.ssh/id_rsa
+```
+
+Then you need to fetch the sources:
+
+```
+$ ../kas/run-kas checkout phytec_polis.yml
+```
+
 Depend on target machine you can start building the image like:
 
 ```
 $ ../kas/kas-docker build phytec_polis.yml
+```
+
+Or just start native build without Docker:
+
+```
+$ ../kas/run-kas build phytec_polis.yml
 ```
 
 The output files are located in `build/tmp/deploy/images/$MACHINE`.
@@ -59,12 +88,6 @@ To start a development shell without building, use:
 
 ```
 $ ../kas/run-kas shell phytec_polis.yml
-```
-
-If you only need to fetch the sources, use:
-
-```
-$ ../kas/run-kas checkout phytec_polis.yml
 ```
 
 == Testing output images via NFS
