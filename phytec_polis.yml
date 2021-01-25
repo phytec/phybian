@@ -12,6 +12,10 @@ repos:
     layers:
       meta:
       meta-isar:
+    patches:
+      vmlinuz:
+        repo: meta-isar-phytec
+        path: 0001-linux-custom-Fix-decompressed-kernel-name-for-arm64.patch
   meta-isar-phytec:
     url: "git@github.com:/ilbers/meta-isar-phytec"
   meta-isar-yogurt:

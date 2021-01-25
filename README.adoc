@@ -50,7 +50,7 @@ $ cd phytec-isar-platform
 Depend on target machine you can start building the image like:
 
 ```
-$ ../kas/kas-docker build phytec.yml
+$ ../kas/kas-docker build phytec_polis.yml
 ```
 
 The output files are located in `build/tmp/deploy/images/$MACHINE`.
@@ -58,13 +58,13 @@ The output files are located in `build/tmp/deploy/images/$MACHINE`.
 To start a development shell without building, use:
 
 ```
-$ ../kas/run-kas shell phytec.yml
+$ ../kas/run-kas shell phytec_polis.yml
 ```
 
 If you only need to fetch the sources, use:
 
 ```
-$ ../kas/run-kas checkout phytec.yml
+$ ../kas/run-kas checkout phytec_polis.yml
 ```
 
 == Testing output images via NFS
