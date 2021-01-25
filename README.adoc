@@ -1,0 +1,121 @@
+= Isar Community BSP for PHYTEC boards
+
+This document describes building link:++https://github.com/ilbers/isar++[Isar]
+Phytec demo images with link:++https://github.com/siemens/kas++[kas].
+
+== Preparing the Build Environment
+
+Install the required packages
+link:++https://github.com/ilbers/isar/blob/master/doc/user_manual.md#install-host-tools++[for Isar]
+and
+link:++https://kas.readthedocs.io/en/1.0/userguide.html#dependencies-installation++[for kas].
+
+For Debian 10:
+
+```
+# apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
+    git mtools parted python3 python3-distutils quilt qemu qemu-user-static \
+    reprepro sudo python3-distro python3-jsonschema python3-yaml
+```
+
+Configure `sudo`:
+
+```
+# visudo -f /etc/sudoers.d/10-users
+```
+
+Add the following line. Replace `<user>` with the actual username.
+
+```
+<user>	ALL=(ALL:ALL) NOPASSWD:ALL
+```
+
+== Downloading the sources
+
+Download kas:
+
+```
+$ git clone https://github.com/siemens/kas
+```
+
+Download the BSP source:
+
+```
+$ git clone https://github.com/ilbers/phytec-isar-platform
+$ cd phytec-isar-platform
+```
+
+== Building the Image
+
+Depend on target machine you can start building the image like:
+
+```
+$ ../kas/kas-docker build phytec.yml
+```
+
+The output files are located in `build/tmp/deploy/images/$MACHINE`.
+
+To start a development shell without building, use:
+
+```
+$ ../kas/run-kas shell phytec.yml
+```
+
+If you only need to fetch the sources, use:
+
+```
+$ ../kas/run-kas checkout phytec.yml
+```
+
+== Testing output images via NFS
+
+=== Prepare loading source
+
+Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phytec-qt5demo-image-yogurt-vendor-xwayland-buster-$MACHINE.tar.gz in its root.
+
+=== For imx8mm (phyboard-polis)
+
+1. Reboot the board and interrupt the bootloader.
+2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
+```
+> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-4.19.35-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-4.19.35-isar+/freescale/imx8mm-phyboard-polis-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
+```
+3. Boot the board:
+```
+> run bootcmd_custom
+```
+
+=== For imx8mp (phyboard-pollux)
+
+1. Reboot the board and interrupt the bootloader.
+2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
+```
+> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-5.4.47-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-5.4.47-isar+/freescale/imx8mp-phyboard-pollux-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
+```
+3. Boot the board:
+```
+>run bootcmd_custom
+```
+
+=== For imx6ul (phyboard-segin)
+
+1. Reboot the board and interrupt the bootloader.
+2. Enable DHCP and mount NFS partition (change _SERVER_IP_ and _NFS_PATH_ to yours):
+```
+> dhcp; mkdir -p /mnt/nfs; mount -t nfs _SERVER_IP_:_NFS_PATH_ /mnt/nfs
+```
+3. Enter into default boot script:
+```
+> sedit /env/boot/nand
+```
+and append to the end (change _SERVER_IP_ and _NFS_PATH_ to yours):
+```
+global.bootm.image="/mnt/nfs/boot/vmlinuz-4.14.93-isar+"
+global.bootm.oftree="/mnt/nfs/usr/lib/linux-image-4.14.93-isar+/imx6ull-phytec-segin-ff-rdk-nand.dtb"
+global.linux.bootargs.dyn.root="root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp"
+```
+4. Boot the board:
+```
+> boot nand
+```
+
