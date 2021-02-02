@@ -14,8 +14,10 @@ repos:
       meta-isar:
   meta-isar-phytec:
     url: "git@github.com:/ilbers/meta-isar-phytec"
+    refspec: "f5af8f331eaa7c8d378aad098bafb23dbc40ce0c"
   meta-isar-yogurt:
     url: "git@github.com:/ilbers/meta-isar-yogurt"
+    refspec: "c3ba16189074df0861894dfda2dc530caa53abdf"
 
 bblayers_conf_header:
   standard: |
@@ -24,6 +26,8 @@ bblayers_conf_header:
 
 local_conf_header:
   standard: |
+    ISAR_RELEASE_CMD = "echo 'v0.1'"
+
     ISAR_CROSS_COMPILE = "1"
 
     USERS += "root"
