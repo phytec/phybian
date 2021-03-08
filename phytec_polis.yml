@@ -1,40 +1,8 @@
 header:
   version: 10
+  includes:
+    - kas_yogurt.yml
 
-build_system: isar
 distro: yogurt-vendor-xwayland
 machine: phyboard-polis-imx8mm-3
 target: mc:phyboard-polis-imx8mm-3:phytec-qt5demo-image
-repos:
-  isar:
-    url: "git@github.com:/ilbers/isar"
-    refspec: "f5a6fdfd9aad49202093aab2158f625429eaf7c5"
-    layers:
-      meta:
-      meta-isar:
-    patches:
-      vmlinuz:
-        repo: meta-isar-phytec
-        path: 0001-linux-custom-Fix-decompressed-kernel-name-for-arm64.patch
-  meta-isar-phytec:
-    url: "git@github.com:/ilbers/meta-isar-phytec"
-    refspec: "f5af8f331eaa7c8d378aad098bafb23dbc40ce0c"
-  meta-isar-yogurt:
-    url: "git@github.com:/ilbers/meta-isar-yogurt"
-    refspec: "c3ba16189074df0861894dfda2dc530caa53abdf"
-
-bblayers_conf_header:
-  standard: |
-    BBPATH = "${TOPDIR}"
-    BBFILES ?= ""
-
-local_conf_header:
-  standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.1'"
-
-    ISAR_CROSS_COMPILE = "1"
-
-    USERS += "root"
-    USER_root[password] ??= "$6$rounds=10000$RXeWrnFmkY$DtuS/OmsAS2cCEDo0BF5qQsizIrq6jPgXnwv3PHqREJeKd1sXdHX/ayQtuQWVDHe0KIO0/sVH8dvQm1KthF0d/"
-
-    PATCHRESOLVE = "noop"
