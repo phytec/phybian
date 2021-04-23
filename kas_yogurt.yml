@@ -5,20 +5,23 @@ build_system: isar
 repos:
   isar:
     url: "git@github.com:/ilbers/isar"
-    refspec: "f5a6fdfd9aad49202093aab2158f625429eaf7c5"
+    refspec: "6ebc90875a4be1c0757c0aca0c2312f25b9d9fdc"
     layers:
       meta:
       meta-isar:
     patches:
-      vmlinuz:
-        repo: meta-isar-phytec
-        path: 0001-linux-custom-Fix-decompressed-kernel-name-for-arm64.patch
+      01-ubifs-host:
+        repo: meta-isar-yogurt
+        path: 0001-Use-host-mkfs.ubifs-for-image-prepare.patch
+      02-chown-out:
+        repo: meta-isar-yogurt
+        path: 0002-Chown-outputs-for-ubifs.patch
   meta-isar-phytec:
     url: "git@github.com:/ilbers/meta-isar-phytec"
-    refspec: "f5af8f331eaa7c8d378aad098bafb23dbc40ce0c"
+    refspec: "ebe90bedc496fb6e33ba66eb1b26f0d99d08da16"
   meta-isar-yogurt:
     url: "git@github.com:/ilbers/meta-isar-yogurt"
-    refspec: "c3ba16189074df0861894dfda2dc530caa53abdf"
+    refspec: "30f35fdf50cdf97bf38cdbbf1735677501bed353"
 
 bblayers_conf_header:
   standard: |
@@ -27,7 +30,7 @@ bblayers_conf_header:
 
 local_conf_header:
   standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.1'"
+    ISAR_RELEASE_CMD = "echo 'v0.2'"
 
     ISAR_CROSS_COMPILE = "1"
 
