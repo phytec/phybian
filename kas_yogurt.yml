@@ -21,7 +21,7 @@ repos:
     refspec: "ebe90bedc496fb6e33ba66eb1b26f0d99d08da16"
   meta-isar-yogurt:
     url: "git@github.com:/ilbers/meta-isar-yogurt"
-    refspec: "30f35fdf50cdf97bf38cdbbf1735677501bed353"
+    refspec: "854797ab203863620686630437d4a2b2dbc935e5"
 
 bblayers_conf_header:
   standard: |
