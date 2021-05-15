@@ -30,7 +30,7 @@ bblayers_conf_header:
 
 local_conf_header:
   standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.3-rc1'"
+    ISAR_RELEASE_CMD = "echo 'v0.3-rc2'"
 
     ISAR_CROSS_COMPILE = "1"
 
