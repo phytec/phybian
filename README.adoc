@@ -75,7 +75,7 @@ $ ../kas/run-kas checkout phytec_polis.yml
 Depend on target machine you can start building the image like:
 
 ```
-$ ../kas/kas-docker build phytec_polis.yml
+$ ../kas/kas-docker --isar build phytec_polis.yml
 ```
 
 Or just start native build without Docker:
