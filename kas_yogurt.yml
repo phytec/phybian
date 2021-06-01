@@ -18,7 +18,7 @@ repos:
         path: 0002-Chown-outputs-for-ubifs.patch
   meta-isar-phytec:
     url: "git@github.com:/ilbers/meta-isar-phytec"
-    refspec: "ebe90bedc496fb6e33ba66eb1b26f0d99d08da16"
+    refspec: "9cf474de9b159aef1653bf1346109920a92ec0d1"
   meta-isar-yogurt:
     url: "git@github.com:/ilbers/meta-isar-yogurt"
     refspec: "8b517b51549e65a5e9d4f1ee2a7c8ffffc2351c1"
