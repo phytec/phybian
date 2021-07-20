@@ -4,5 +4,5 @@ header:
     - kas_yogurt.yml
 
 distro: yogurt-vendor-xwayland
-machine: phyboard-polis-imx8mm-3
-target: mc:phyboard-polis-imx8mm-3:phytec-qt5demo-image
+machine: phyboard-polis-imx8mm-4
+target: mc:phyboard-polis-imx8mm-4:phytec-qt5demo-image
