@@ -5,23 +5,38 @@ build_system: isar
 repos:
   isar:
     url: "git@github.com:/ilbers/isar"
-    refspec: "6ebc90875a4be1c0757c0aca0c2312f25b9d9fdc"
+    refspec: "1fd9f5de842ba1ed4ccbb555527f25bc839a6a6b"
     layers:
       meta:
       meta-isar:
     patches:
-      01-ubifs-host:
+      0001-separate-locks:
         repo: meta-isar-yogurt
-        path: 0001-Use-host-mkfs.ubifs-for-image-prepare.patch
-      02-chown-out:
+        path: 0001-rootfs-Use-separate-mounts-lock-file.patch
+      0002-rootfs-refs:
         repo: meta-isar-yogurt
-        path: 0002-Chown-outputs-for-ubifs.patch
+        path: 0002-image-Add-reference-counter.patch
+      0003-ubifs-cross-compile:
+        repo: meta-isar-yogurt
+        path: 0003-ubifs-img-Force-cross-compile-usage.patch
+      0004-buildchroot-deps-var:
+        repo: meta-isar-yogurt
+        path: 0004-buildchroot-Introduce-buildchroot-dependency-variabl.patch
+      0005-buildchroot-deps-apt:
+        repo: meta-isar-yogurt
+        path: 0005-buildchroot-Move-apt_fetch-dependency-to-dpkg-base.patch
+      0006-buildchroot-deps-imager:
+        repo: meta-isar-yogurt
+        path: 0006-image-Fix-do_install_imager_deps-dependency.patch
+      0007-ubifs-chown:
+        repo: meta-isar-yogurt
+        path: 0007-ubifs-Fix-output-files-permissions.patch
   meta-isar-phytec:
     url: "git@github.com:/ilbers/meta-isar-phytec"
     refspec: "9cf474de9b159aef1653bf1346109920a92ec0d1"
   meta-isar-yogurt:
     url: "git@github.com:/ilbers/meta-isar-yogurt"
-    refspec: "c4c047c6d3aba843ead38af8779350f9b8936fbb"
+    refspec: "522f4d5650e29bc02857bf84033a0fbc58f042b2"
 
 bblayers_conf_header:
   standard: |
