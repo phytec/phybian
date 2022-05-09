@@ -1,8 +1,8 @@
 header:
   version: 10
   includes:
-    - kas_yogurt.yml
+    - kas_phybian.yml
 
-distro: yogurt-vendor-xwayland
+distro: phybian-vendor-xwayland
 machine: phyboard-polis-imx8mm-4
 target: mc:phyboard-polis-imx8mm-4:phytec-qt5demo-image

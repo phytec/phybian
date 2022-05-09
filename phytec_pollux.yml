@@ -1,8 +1,8 @@
 header:
   version: 10
   includes:
-    - kas_yogurt.yml
+    - kas_phybian.yml
 
-distro: yogurt-vendor-xwayland
+distro: phybian-vendor-xwayland
 machine: phyboard-pollux-imx8mp-1
 target: mc:phyboard-pollux-imx8mp-1:phytec-qt5demo-image
