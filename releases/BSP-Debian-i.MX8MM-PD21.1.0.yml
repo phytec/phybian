@@ -1,0 +1,8 @@
+header:
+  version: 10
+  includes:
+    - kas_phybian_pd21.1.0.yml
+
+distro: phybian-vendor-xwayland
+machine: phyboard-polis-imx8mm-4
+target: mc:phyboard-polis-imx8mm-4:phytec-qt5demo-image
