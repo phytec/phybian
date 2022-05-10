@@ -33,10 +33,10 @@ repos:
         path: 0007-ubifs-Fix-output-files-permissions.patch
   meta-isar-phytec:
     url: "https://github.com/phytec/meta-isar-phytec"
-    refspec: "ada71b3877c63a1ae7097d2b19290991d34afdbc"
+    refspec:  main
   meta-isar-qtdemo:
     url: "https://github.com/phytec/meta-isar-qtdemo"
-    refspec: "ef465859d6ab45950e5d54529b18711720e3e572"
+    refspec: main
 
 bblayers_conf_header:
   standard: |
@@ -45,7 +45,7 @@ bblayers_conf_header:
 
 local_conf_header:
   standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.4-rc1'"
+    ISAR_RELEASE_CMD = "echo 'v0.4'"
 
     ISAR_CROSS_COMPILE = "1"
 

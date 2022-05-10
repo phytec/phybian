@@ -1,0 +1,10 @@
+header:
+  version: 10
+  includes:
+    - phytec_polis.yml
+
+repos:
+  meta-isar-phytec:
+    refspec: develop
+  meta-isar-qtdemo:
+    refspec: develop
