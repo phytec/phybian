@@ -1,7 +1,7 @@
-= Isar Community BSP for PHYTEC boards
+= phyBIAN - PHYTEC Debian images using Isar and kas
 
 This document describes building link:++https://github.com/ilbers/isar++[Isar]
-Phytec demo images with link:++https://github.com/siemens/kas++[kas].
+Phytec images with link:++https://github.com/siemens/kas++[kas].
 
 == Preparing the Build Environment
 
@@ -38,17 +38,17 @@ Add the following line. Replace `<user>` with the actual username.
 
 == Downloading the sources
 
+Download the BSP source:
+
+```
+$ git clone https://github.com/phytec/phybian
+$ cd phybian
+```
+
 Download kas:
 
 ```
 $ git clone https://github.com/siemens/kas
-```
-
-Download the BSP source:
-
-```
-$ git clone https://github.com/ilbers/phytec-isar-platform
-$ cd phytec-isar-platform
 ```
 
 == Building the Image
@@ -56,7 +56,8 @@ $ cd phytec-isar-platform
 To speed up fetching process set global DL_DIR location:
 
 ```
-export DL_DIR=/path/to/downloads
+mkdir dl_dir
+export DL_DIR=$(pwd)/dl_dir
 ```
 
 Start ssh-agent and add your rsa key:
@@ -69,19 +70,21 @@ $ ssh-add ~/.ssh/id_rsa
 Then you need to fetch the sources:
 
 ```
-$ ../kas/run-kas checkout phytec_polis.yml
+$ kas/run-kas checkout phytec_polis.yml
+or
+$ kas/kas-docker checkout phytec_polis.yml
 ```
 
 Depend on target machine you can start building the image like:
 
 ```
-$ ../kas/kas-docker --isar build phytec_polis.yml
+$ kas/kas-docker --isar build phytec_polis.yml
 ```
 
 Or just start native build without Docker:
 
 ```
-$ ../kas/run-kas build phytec_polis.yml
+$ kas/run-kas build phytec_polis.yml
 ```
 
 The output files are located in `build/tmp/deploy/images/$MACHINE`.
@@ -89,7 +92,7 @@ The output files are located in `build/tmp/deploy/images/$MACHINE`.
 To start a development shell without building, use:
 
 ```
-$ ../kas/run-kas shell phytec_polis.yml
+$ kas/run-kas shell phytec_polis.yml
 ```
 
 == Testing output images via NFS
