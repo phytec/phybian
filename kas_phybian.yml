@@ -5,32 +5,10 @@ build_system: isar
 repos:
   isar:
     url: "https://github.com/ilbers/isar"
-    refspec: "1fd9f5de842ba1ed4ccbb555527f25bc839a6a6b"
+    refspec: "d07f8f354f0b4698d6d3c764b7b8b11dba3175df"
     layers:
       meta:
       meta-isar:
-    patches:
-      0001-separate-locks:
-        repo: meta-isar-qtdemo
-        path: 0001-rootfs-Use-separate-mounts-lock-file.patch
-      0002-rootfs-refs:
-        repo: meta-isar-qtdemo
-        path: 0002-image-Add-reference-counter.patch
-      0003-ubifs-cross-compile:
-        repo: meta-isar-qtdemo
-        path: 0003-ubifs-img-Force-cross-compile-usage.patch
-      0004-buildchroot-deps-var:
-        repo: meta-isar-qtdemo
-        path: 0004-buildchroot-Introduce-buildchroot-dependency-variabl.patch
-      0005-buildchroot-deps-apt:
-        repo: meta-isar-qtdemo
-        path: 0005-buildchroot-Move-apt_fetch-dependency-to-dpkg-base.patch
-      0006-buildchroot-deps-imager:
-        repo: meta-isar-qtdemo
-        path: 0006-image-Fix-do_install_imager_deps-dependency.patch
-      0007-ubifs-chown:
-        repo: meta-isar-qtdemo
-        path: 0007-ubifs-Fix-output-files-permissions.patch
   meta-isar-phytec:
     url: "https://github.com/phytec/meta-isar-phytec"
     refspec:  main
