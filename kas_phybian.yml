@@ -1,5 +1,5 @@
 header:
-  version: 10
+  version: 11
 
 build_system: isar
 repos:
@@ -37,11 +37,6 @@ repos:
   meta-isar-qtdemo:
     url: "https://github.com/phytec/meta-isar-qtdemo"
     refspec: main
-
-bblayers_conf_header:
-  standard: |
-    BBPATH = "${TOPDIR}"
-    BBFILES ?= ""
 
 local_conf_header:
   standard: |
