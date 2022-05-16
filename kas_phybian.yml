@@ -18,7 +18,7 @@ repos:
 
 local_conf_header:
   standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.4'"
+    ISAR_RELEASE_CMD = "echo 'v0.5-rc1'"
 
     ISAR_CROSS_COMPILE = "1"
 
