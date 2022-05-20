@@ -4,5 +4,5 @@ header:
     - kas_phybian.yml
 
 distro: phybian-vendor-xwayland
-machine: phyboard-pollux-imx8mp-1
-target: mc:phyboard-pollux-imx8mp-1:phytec-qt5demo-image
+machine: phyboard-pollux-imx8mp-3
+target: mc:phyboard-pollux-imx8mp-3:phytec-qt5demo-image
