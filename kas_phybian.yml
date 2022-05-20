@@ -37,6 +37,9 @@ repos:
   meta-isar-qtdemo:
     url: "https://github.com/phytec/meta-isar-qtdemo"
     refspec: main
+  meta-isar-gnome:
+    url: "git@github.com:/BHahn42618/meta-isar-gnome"
+    refspec: main
 
 bblayers_conf_header:
   standard: |
