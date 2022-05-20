@@ -37,6 +37,7 @@ repos:
   meta-isar-qtdemo:
     url: "https://github.com/phytec/meta-isar-qtdemo"
     refspec: main
+#the following three lines are an example how to build gnome into the image
   meta-isar-gnome:
     url: "https://github.com/BHahn42618/meta-isar-gnome"
     refspec: main
