@@ -19,7 +19,7 @@ You should also have mtd-utils package installed for ubifs image reneration for 
 For Debian 10:
 
 ```
-# apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
+$ apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
     git mtools parted python3 python3-distutils quilt qemu qemu-user-static \
     reprepro sudo python3-distro python3-jsonschema python3-yaml mtd-utils
 ```
@@ -27,7 +27,7 @@ For Debian 10:
 Configure `sudo`:
 
 ```
-# visudo -f /etc/sudoers.d/10-users
+$ visudo -f /etc/sudoers.d/10-users
 ```
 
 Add the following line. Replace `<user>` with the actual username.
@@ -50,100 +50,103 @@ Download kas:
 ```
 $ git clone https://github.com/siemens/kas
 ```
+==Add your own applications
 
+In this example gnome will get built into the image.
+
+First you need to add your own layer. Therefore create a remote git repository. For example on github. This will be your own new layer with your custom applications you want to built into the image.
+
+In this case it is named meta-isar-gnome.
+
+Every repository needs a conf folder with a layer.conf file in it. The layer.conf file should look something like this:
+```
+# We have a conf and classes directory, append to BBPATH
+BBPATH .= ":${LAYERDIR}"
+
+# We have a recipes directory, add to BBFILES
+BBFILES += "${LAYERDIR}/recipes*/*/*.bb ${LAYERDIR}/recipes*/*/*.bbappend"
+
+IMAGE_PREINSTALL += "gnome"
+```
+Then you need to create the actual recipe for gnome. This will be the gnome.bb file located at ${LAYERDIR}/recipes-gnome/gnome/.
+
+```
+inherit dpkg
+
+SRC_URI="apt://gnome"
+```
+At last you need to disable the weston and phytec-qtdemo on startup. This will be realized with .bbappend files.
+
+You need to create a weston-init.bbappend at ${LAYERDIR}/recipes-graphics/wayland/ which should look like this.
+```
+FILESEXTRAPATHS_prepend := "${THISDIR}/weston-init:"
+```
+Also you need to create a postinst file at ${LAYERDIR}/recipes-graphics/wayland/weston-init/.
+```
+systemctl disable weston.service
+```
+Then create a phytec-qtdemo_git.bbappend at ${LAYERDIR}/recipes-qt/examples/.
+```
+FILESEXTRAPATHS_prepend := "${THISDIR}/phytec-qtdemo:"
+```
+And a postinst file at ${LAYERDIR}/recipes-qt/examples/phytec-qtdemo/.
+```
+systemctl disable phytec-qtdemo.service
+```
+Then edit the kas_phybian.yml file. Uncomment the following five lines.
+
+In the url line insert your git repositorys url. It will then be automatically cloned when building the image.
+```
+  meta-isar-gnome:
+    url: "https://github.com/phytec/meta-isar-gnome"
+    refspec: main
+```
+    USERS += "user"
+    USER_user[password] ??= "$6$QXQnlmd0IB2vzC3T$PpOyTsoItL0KtZf9A/Mp/.StF4w0UHJ.TkM52WLQIW0h2BOPwcn3WKby8wLZFCJID0AtezHj3Nbu5BPBA0u9t/"
+```
 == Building the Image
 
-To speed up fetching process set global DL_DIR location:
+To start the image, there will be a init.sh script in the phybian repository. You may need to make it executable with:
 
-```
-mkdir dl_dir
-export DL_DIR=$(pwd)/dl_dir
-```
+$ chmod +x init.sh
 
-Start ssh-agent and add your rsa key:
+Then you can execute it with:
 
-```
-$ eval $(ssh-agent)
-$ ssh-add ~/.ssh/id_rsa
-```
+$ ./init.sh
 
-Then you need to fetch the sources:
+When the build process is completed the final image can be found at:
 
-```
-$ kas/run-kas checkout phytec_polis.yml
-or
-$ kas/kas-docker checkout phytec_polis.yml
-```
+build/tmp/deploy/images/phyboard-polis-imx8mm-4/
 
-Depend on target machine you can start building the image like:
+It is named phytec-qt5demo-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic.img
 
-```
-$ kas/kas-docker --isar build phytec_polis.yml
-```
+==Flash the Image to the SD-Card
 
-Or just start native build without Docker:
+$ cd build/tmp/deploy/images/phyboard-polis-imx8mm-4/
 
-```
-$ kas/run-kas build phytec_polis.yml
-```
+List all devices.
 
-The output files are located in `build/tmp/deploy/images/$MACHINE`.
+$ lsblk
 
-To start a development shell without building, use:
+Find your SD-Card (if connected via USB SD-Card Reader => normally sda or sdc) Be careful to pick the right device otherwise dd will overwrite the System!!!
 
-```
-$ kas/run-kas shell phytec_polis.yml
-```
+$ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic.img of=/dev/sda
 
-== Testing output images via NFS
+==Boot up the Board
 
-=== Prepare loading source
+Insert the SD-Card in the Board
 
-Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phytec-qt5demo-image-yogurt-vendor-xwayland-buster-$MACHINE.tar.gz in its root.
+Set the Boot-switches to SD-Card Boot
 
-=== For imx8mm (phyboard-polis)
+Plug in the Micro USB Cable into X9 and PC
 
-1. Reboot the board and interrupt the bootloader.
-2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-4.19.35-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-4.19.35-isar+/freescale/imx8mm-phyboard-polis-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
-```
-3. Boot the board:
-```
-> run bootcmd_custom
-```
+Connect Display
 
-=== For imx8mp (phyboard-pollux)
+Connect Power Supply
 
-1. Reboot the board and interrupt the bootloader.
-2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-5.4.47-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-5.4.47-isar+/freescale/imx8mp-phyboard-pollux-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
-```
-3. Boot the board:
-```
->run bootcmd_custom
-```
+The board will boot into the gnome login screen.
 
-=== For imx6ul (phyboard-segin)
+==Login
 
-1. Reboot the board and interrupt the bootloader.
-2. Enable DHCP and mount NFS partition (change _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> dhcp; mkdir -p /mnt/nfs; mount -t nfs _SERVER_IP_:_NFS_PATH_ /mnt/nfs
-```
-3. Enter into default boot script:
-```
-> sedit /env/boot/nand
-```
-and append to the end (change _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-global.bootm.image="/mnt/nfs/boot/vmlinuz-4.14.93-isar+"
-global.bootm.oftree="/mnt/nfs/usr/lib/linux-image-4.14.93-isar+/imx6ull-phytec-segin-ff-rdk-nand.dtb"
-global.linux.bootargs.dyn.root="root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp"
-```
-4. Boot the board:
-```
-> boot nand
-```
-
+username: user
+password: user
