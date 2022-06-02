@@ -16,7 +16,7 @@ link:++https://kas.readthedocs.io/en/1.0/userguide.html#dependencies-installatio
 
 You should also have mtd-utils package installed for ubifs image reneration for imx6ul target.
 
-For Debian 10:
+For Debian 11:
 
 ```
 # apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
@@ -99,30 +99,18 @@ $ kas/run-kas shell phytec_polis.yml
 
 === Prepare loading source
 
-Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phytec-qt5demo-image-yogurt-vendor-xwayland-buster-$MACHINE.tar.gz in its root.
-
-=== For imx8mm (phyboard-polis)
-
-1. Reboot the board and interrupt the bootloader.
-2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-4.19.35-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-4.19.35-isar+/freescale/imx8mm-phyboard-polis-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
-```
-3. Boot the board:
-```
-> run bootcmd_custom
-```
+Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.tar.gz in its root.
 
 === For imx8mp (phyboard-pollux)
 
 1. Reboot the board and interrupt the bootloader.
 2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
 ```
-> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-5.4.47-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-5.4.47-isar+/freescale/imx8mp-phyboard-pollux-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
+> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-5.10.72-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-5.10.72-isar+/freescale/imx8mp-phyboard-pollux-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
 ```
 3. Boot the board:
 ```
->run bootcmd_custom
+> run bootcmd_custom
 ```
 
 === For imx6ul (phyboard-segin)
@@ -138,8 +126,8 @@ Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phyte
 ```
 and append to the end (change _SERVER_IP_ and _NFS_PATH_ to yours):
 ```
-global.bootm.image="/mnt/nfs/boot/vmlinuz-4.14.93-isar+"
-global.bootm.oftree="/mnt/nfs/usr/lib/linux-image-4.14.93-isar+/imx6ull-phytec-segin-ff-rdk-nand.dtb"
+global.bootm.image="/mnt/nfs/boot/vmlinuz-5.10.76-isar+"
+global.bootm.oftree="/mnt/nfs/usr/lib/linux-image-5.10.76-isar+/imx6ull-phytec-segin-ff-rdk-nand.dtb"
 global.linux.bootargs.dyn.root="root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp"
 ```
 4. Boot the board:
@@ -147,3 +135,18 @@ global.linux.bootargs.dyn.root="root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_P
 > boot nand
 ```
 
+== Testing output SD images
+
+1. Unmount all SD card partitions (e.g. /dev/sde1):
+
+```
+$ sudo umount /dev/<your_device><number>
+```
+
+2. Flash WIC image to SD card:
+
+```
+$ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.wic of=/dev/<your_device> bs=1MB conv=fsync
+```
+
+3. Boot the board using prepared SD card.
