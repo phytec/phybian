@@ -16,10 +16,10 @@ link:++https://kas.readthedocs.io/en/1.0/userguide.html#dependencies-installatio
 
 You should also have mtd-utils package installed for ubifs image reneration for imx6ul target.
 
-For Debian 11:
+For Debian 10:
 
 ```
-# apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
+$ apt-get install binfmt-support debootstrap dosfstools dpkg-dev gettext-base \
     git mtools parted python3 python3-distutils quilt qemu qemu-user-static \
     reprepro sudo python3-distro python3-jsonschema python3-yaml mtd-utils
 ```
@@ -27,7 +27,7 @@ For Debian 11:
 Configure `sudo`:
 
 ```
-# visudo -f /etc/sudoers.d/10-users
+$ visudo -f /etc/sudoers.d/10-users
 ```
 
 Add the following line. Replace `<user>` with the actual username.
@@ -50,103 +50,67 @@ Download kas:
 ```
 $ git clone https://github.com/siemens/kas
 ```
+== Prepare for building gnome image
 
-== Building the Image
+First edit the phytec_polis.yml file. Change the target from phytec-qt5demo-image to phytec-gnome-image.
 
-To speed up fetching process set global DL_DIR location:
-
-```
-mkdir dl_dir
-export DL_DIR=$(pwd)/dl_dir
-```
-
-Start ssh-agent and add your rsa key:
+Then edit the kas_phybian.yml file. Uncomment the following four lines.
 
 ```
-$ eval $(ssh-agent)
-$ ssh-add ~/.ssh/id_rsa
+USERS += "user"
+USER_user[password] ??= ""
+USER_user[flags] += "create-home"
+USER_user[flags] += "allow-empty-password"
 ```
+== Start the build process
 
-Then you need to fetch the sources:
+To start the image, there will be a init.sh script in the phybian repository. You may need to make it executable with:
 
-```
-$ kas/run-kas checkout phytec_polis.yml
-or
-$ kas/kas-docker checkout phytec_polis.yml
-```
+$ chmod +x init.sh
 
-Depend on target machine you can start building the image like:
+Then you can execute it with:
 
-```
-$ kas/kas-docker --isar build phytec_polis.yml
-```
+$ ./init.sh
 
-Or just start native build without Docker:
+When the build process is completed the final image can be found at:
 
-```
-$ kas/run-kas build phytec_polis.yml
-```
+build/tmp/deploy/images/phyboard-polis-imx8mm-4/
 
-The output files are located in `build/tmp/deploy/images/$MACHINE`.
+It is named phytec-gnome-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic
 
-To start a development shell without building, use:
+==Flash the Image to the SD-Card
 
-```
-$ kas/run-kas shell phytec_polis.yml
-```
+$ cd build/tmp/deploy/images/phyboard-polis-imx8mm-4/
 
-== Testing output images via NFS
+List all devices.
 
-=== Prepare loading source
+$ lsblk
 
-Install NFS server on the host and unpack build/tmp/deploy/images/$MACHINE/phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.tar.gz in its root.
+Find your SD-Card (if connected via USB SD-Card Reader => normally sda or sdc) Be careful to pick the right device otherwise dd will overwrite the System!!!
 
-=== For imx8mp (phyboard-pollux)
+$ sudo dd if=phytec-gnome-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic.img of=/dev/sda
 
-1. Reboot the board and interrupt the bootloader.
-2. Set custom boot command (change _BOARD_IP_, _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> setenv bootcmd_custom "setenv ipaddr "_BOARD_IP_"; nfs ${loadaddr} _SERVER_IP_:_NFS_PATH_/boot/vmlinux-5.10.72-isar+; nfs ${fdt_addr} _SERVER_IP_:_NFS_PATH_/usr/lib/linux-image-5.10.72-isar+/freescale/imx8mp-phyboard-pollux-rdk.dtb; setenv bootargs console=${console} root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp rw; booti ${loadaddr} - ${fdt_addr}"
-```
-3. Boot the board:
-```
-> run bootcmd_custom
-```
+==Boot up the Board
 
-=== For imx6ul (phyboard-segin)
+Insert the SD-Card in the Board
 
-1. Reboot the board and interrupt the bootloader.
-2. Enable DHCP and mount NFS partition (change _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-> dhcp; mkdir -p /mnt/nfs; mount -t nfs _SERVER_IP_:_NFS_PATH_ /mnt/nfs
-```
-3. Enter into default boot script:
-```
-> sedit /env/boot/nand
-```
-and append to the end (change _SERVER_IP_ and _NFS_PATH_ to yours):
-```
-global.bootm.image="/mnt/nfs/boot/vmlinuz-5.10.76-isar+"
-global.bootm.oftree="/mnt/nfs/usr/lib/linux-image-5.10.76-isar+/imx6ull-phytec-segin-ff-rdk-nand.dtb"
-global.linux.bootargs.dyn.root="root=/dev/nfs ip=dhcp nfsroot=_SERVER_IP_:_NFS_PATH_,v3,tcp"
-```
-4. Boot the board:
-```
-> boot nand
-```
+Set the Boot-switches to SD-Card Boot
 
-== Testing output SD images
+Connect Display
 
-1. Unmount all SD card partitions (e.g. /dev/sde1):
+Connect Power Supply
 
-```
-$ sudo umount /dev/<your_device><number>
-```
+The board will boot into the gnome login screen.
 
-2. Flash WIC image to SD card:
+==Login
 
-```
-$ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.wic of=/dev/<your_device> bs=1MB conv=fsync
-```
+username: user
+There is no password for this user.
 
-3. Boot the board using prepared SD card.
+==Login root (via USB_Debug/minicom)
+
+Alternatively there is a USB Debug Port. There you can login for example as root using minicom.
+
+username: root
+password: root
+
