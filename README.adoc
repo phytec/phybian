@@ -50,7 +50,7 @@ Download kas:
 ```
 $ git clone https://github.com/siemens/kas
 ```
-==Add your own applications
+== Add your own applications
 
 In this example gnome will get built into the image.
 
@@ -101,38 +101,39 @@ In the url line insert your git repositorys url. It will then be automatically c
     url: "https://github.com/phytec/meta-isar-gnome"
     refspec: main
 ```
+```
     USERS += "user"
     USER_user[password] ??= "$6$QXQnlmd0IB2vzC3T$PpOyTsoItL0KtZf9A/Mp/.StF4w0UHJ.TkM52WLQIW0h2BOPwcn3WKby8wLZFCJID0AtezHj3Nbu5BPBA0u9t/"
 ```
 == Building the Image
 
 To start the image, there will be a init.sh script in the phybian repository. You may need to make it executable with:
-
+```
 $ chmod +x init.sh
-
+```
 Then you can execute it with:
-
+```
 $ ./init.sh
-
+```
 When the build process is completed the final image can be found at:
 
 build/tmp/deploy/images/phyboard-polis-imx8mm-4/
 
 It is named phytec-qt5demo-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic.img
 
-==Flash the Image to the SD-Card
-
+== Flash the Image to the SD-Card
+```
 $ cd build/tmp/deploy/images/phyboard-polis-imx8mm-4/
-
+```
 List all devices.
-
+```
 $ lsblk
-
+```
 Find your SD-Card (if connected via USB SD-Card Reader => normally sda or sdc) Be careful to pick the right device otherwise dd will overwrite the System!!!
-
+```
 $ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-buster-phyboard-polis-imx8mm-4.wic.img of=/dev/sda
-
-==Boot up the Board
+```
+== Boot up the Board
 
 Insert the SD-Card in the Board
 
@@ -146,7 +147,7 @@ Connect Power Supply
 
 The board will boot into the gnome login screen.
 
-==Login
+== Login
 
 username: user
 password: user
