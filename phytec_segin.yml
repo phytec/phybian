@@ -3,6 +3,7 @@ header:
   includes:
     - kas_phybian.yml
 
+build_system: isar
 distro: phybian-vendor-xwayland
 machine: phyboard-segin-imx6ul-6 
 target: mc:phyboard-segin-imx6ul-6:phytec-qt5demo-image

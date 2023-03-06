@@ -3,6 +3,7 @@ header:
   includes:
     - phytec_polis.yml
 
+build_system: isar
 repos:
   meta-isar-phytec:
     refspec: develop

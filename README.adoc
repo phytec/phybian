@@ -5,9 +5,9 @@ Phytec images with link:++https://github.com/siemens/kas++[kas].
 
 == Preparing the Build Environment
 
-If running build in kas-docker the only prerequirement is installed docker.
+If we build with kas-container, the only prerequirement is an installed podman or docker.
 
-If running native Isar build you should prepare build environment:
+If we run a native Isar build, you should prepare the build environment:
 
 Install the required packages
 link:++https://github.com/ilbers/isar/blob/master/doc/user_manual.md#install-host-tools++[for Isar]
@@ -72,13 +72,13 @@ Then you need to fetch the sources:
 ```
 $ kas/run-kas checkout phytec_polis.yml
 or
-$ kas/kas-docker checkout phytec_polis.yml
+$ kas/kas-container checkout phytec_polis.yml
 ```
 
 Depend on target machine you can start building the image like:
 
 ```
-$ kas/kas-docker --isar build phytec_polis.yml
+$ kas/kas-container build phytec_polis.yml
 ```
 
 Or just start native build without Docker:

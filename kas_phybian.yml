@@ -1,7 +1,6 @@
 header:
   version: 11
 
-build_system: isar
 repos:
   isar:
     url: "https://github.com/ilbers/isar"
