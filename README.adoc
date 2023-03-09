@@ -150,3 +150,24 @@ $ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.wic 
 ```
 
 3. Boot the board using prepared SD card.
+
+
+== Quickstart Debian 11 Buster
+
+If your board has never been setup, you might need to set the local time and/or timezone:
+
+  $ timedatectl set-time '2022-10-10 14:14:00'
+  $ timedatectl set-timezone Europe/Berlin
+
+Stop the running phytec-demo
+
+  $ systemctl disable --now phytec-qtdemo
+  $ systemctl disable --now weston
+
+Update the packagefeed:
+
+  $ apt update
+
+Install your tools, e.g.:
+
+  $ apt install -y mosquitto
