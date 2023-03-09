@@ -145,6 +145,15 @@ $ sudo umount /dev/<your_device><number>
 
 2. Flash WIC image to SD card:
 
+Preferred method is using bmaptool, which needs to be installed on the host:
+
+```
+$ sudo bmaptool copy build/tmp/deploy/images/phyboard-pollux-imx8mp-3/phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-phyboard-pollux-imx8mp-3.wic /dev/<your_sdcard_device>
+```
+
+Flashing can also be done with dd, which is available on most hosts, but flashing will be slower:
+
+
 ```
 $ sudo dd if=phytec-qt5demo-image-phybian-vendor-xwayland-bullseye-$MACHINE.wic of=/dev/<your_device> bs=1MB conv=fsync
 ```
