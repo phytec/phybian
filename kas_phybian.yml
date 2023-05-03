@@ -9,15 +9,17 @@ repos:
       meta:
       meta-isar:
   meta-isar-phytec:
-    url: "https://github.com/phytec/meta-isar-phytec"
-    refspec:  main
+    #url: "https://github.com/phytec/meta-isar-phytec"
+    #refspec:  main
+    path: "meta-isar-phytec"
   meta-isar-qtdemo:
-    url: "https://github.com/phytec/meta-isar-qtdemo"
-    refspec: main
+    #url: "https://github.com/phytec/meta-isar-qtdemo"
+    #refspec: main
+    path: "meta-isar-qtdemo"
 
 local_conf_header:
   standard: |
-    ISAR_RELEASE_CMD = "echo 'v0.5-rc1'"
+    ISAR_RELEASE_CMD = "echo 'v0.6'"
 
     ISAR_CROSS_COMPILE = "1"
 
